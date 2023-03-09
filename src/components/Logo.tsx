@@ -13,9 +13,9 @@ export function Logo() {
           align="center"
           justify="center"
           bg="indigo"
-          w={132}
-          h={48}
-          p={10}
+          w={120}
+          h={38}
+          p={5}
           className={classes.logo}
         >
           <Image src="/logo-no-background.png" alt="Logo" w="100%" h="100%" />
