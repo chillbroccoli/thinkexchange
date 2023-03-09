@@ -7,6 +7,7 @@ import { useEffect } from "react";
 
 import { MainLayout } from "~/components/layouts/MainLayout";
 import { Feed } from "~/components/project/Feed";
+import { MiniList } from "~/components/project/MiniList";
 import { api } from "~/utils/api";
 import { ClientRoutes } from "~/utils/constants/routes";
 import { pluralizeCount } from "~/utils/helpers/pluralizeCount";
@@ -33,6 +34,9 @@ export function TagView() {
     }
   );
 
+  const { data: latestProjects, isLoading: isLatestProjectsLoading } =
+    api.project.useLatestProjects();
+
   const projects = data?.pages.flatMap((page) => page.projects) ?? [];
 
   useEffect(() => {
@@ -44,7 +48,7 @@ export function TagView() {
   return (
     <MainLayout>
       <Container size="lg" mt={20}>
-        <Grid gutter={60}>
+        <Grid gutter={10}>
           <Grid.Col span={3}>
             <Flex direction="column" className={classes.sidebar} p={10} px={14}>
               <Title order={2} transform="capitalize" mb={8}>
@@ -65,10 +69,12 @@ export function TagView() {
               <Text>{pluralizeCount(projects.length ?? 0, "post")} found</Text>
             </Flex>
           </Grid.Col>
-          <Grid.Col span={7}>
+          <Grid.Col span={6}>
             <Feed data={projects} isLoading={isLoading} />
           </Grid.Col>
-          <Grid.Col span={2}></Grid.Col>
+          <Grid.Col span={3}>
+            <MiniList title="Latest" data={latestProjects} isLoading={isLatestProjectsLoading} />
+          </Grid.Col>
         </Grid>
       </Container>
     </MainLayout>
