@@ -8,6 +8,8 @@ const handler: NextApiHandler = async (req, res) => {
 
   try {
     const projects = await prisma.project.findMany({
+      take: limit + 1,
+      cursor: cursor ? { id: cursor } : undefined,
       where: {
         title: {
           contains: query,
@@ -33,14 +35,14 @@ const handler: NextApiHandler = async (req, res) => {
           },
         },
       },
-      orderBy: {
-        createdAt: "desc",
-      },
-      take: limit + 1,
-      cursor: cursor ? { id: cursor } : undefined,
+      orderBy: [
+        {
+          createdAt: "desc",
+        },
+      ],
     });
 
-    let nextCursor: string | undefined = undefined;
+    let nextCursor: typeof cursor | undefined = undefined;
 
     if (projects.length > limit) {
       const nextItem = projects.pop() as (typeof projects)[number];
