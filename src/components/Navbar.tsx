@@ -22,7 +22,7 @@ export function Navbar() {
           </Flex>
 
           <Flex gap={14}>
-            {session ? (
+            {session?.user ? (
               <Profile />
             ) : (
               <>
