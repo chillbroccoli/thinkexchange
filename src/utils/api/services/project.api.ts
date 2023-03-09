@@ -66,6 +66,19 @@ export const project = {
     }, options);
   },
 
+  useUpdate: (
+    { slug }: { slug: string },
+    options?: MutationOptions<ProjectResponse, Error, CreateProjectInput>
+  ) => {
+    return useMutation(async (body: CreateProjectInput) => {
+      const { json } = await API.patch([APIRoutes.PROJECT, { slug }], {
+        body,
+      });
+
+      return json as ProjectResponse;
+    }, options);
+  },
+
   useDelete: (options?: MutationOptions<void, Error, { slug: string }>) => {
     return useMutation(async ({ slug }: { slug: string }) => {
       await API.delete([APIRoutes.PROJECT, { slug }]);
