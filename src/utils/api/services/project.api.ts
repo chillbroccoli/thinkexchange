@@ -31,7 +31,7 @@ export const project = {
         const { json } = await API.get(APIRoutes.FEED, {
           query: {
             ...query,
-            cursor: query?.cursor || pageParam,
+            cursor: pageParam,
           },
         });
 
@@ -39,7 +39,6 @@ export const project = {
       },
       {
         ...options,
-        getNextPageParam: (lastPage) => lastPage.nextCursor,
       }
     );
   },
