@@ -11,9 +11,14 @@ import { useScrollPosition } from "~/utils/hooks/useScrollPosition";
 export function HomeView() {
   const scrollPosition = useScrollPosition();
 
-  const { data, isLoading, hasNextPage, isFetching, fetchNextPage } = api.project.useFeed({
-    limit: 5,
-  });
+  const { data, isLoading, hasNextPage, isFetching, fetchNextPage } = api.project.useFeed(
+    {
+      limit: 5,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
 
   const projects = data?.pages.flatMap((page) => page.projects) ?? [];
 
@@ -21,7 +26,7 @@ export function HomeView() {
     if (scrollPosition > 95 && hasNextPage && !isFetching) {
       fetchNextPage();
     }
-  }, [scrollPosition, hasNextPage, isFetching, fetchNextPage]);
+  }, [scrollPosition]);
 
   return (
     <MainLayout>

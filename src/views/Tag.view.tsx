@@ -30,6 +30,7 @@ export function TagView() {
     },
     {
       enabled: tag !== undefined,
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
 
