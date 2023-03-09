@@ -22,9 +22,7 @@ export function Feed({
       <Flex direction="column" gap={20}>
         {data &&
           data.length > 0 &&
-          data.map((project) => (
-            <ProjectCard key={`${project.id}-${project.slug}`} project={project} />
-          ))}
+          data.map((project) => <ProjectCard key={project.id} project={project} />)}
       </Flex>
     </Box>
   );
