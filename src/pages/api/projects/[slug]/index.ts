@@ -7,7 +7,7 @@ const handler: NextApiHandler = async (req, res) => {
   const { slug } = req.query as { slug: string };
   const session = await getServerAuthSession({ req, res });
 
-  if (req.method !== "GET" && req.method !== "DELETE") {
+  if (req.method !== "GET" && req.method !== "DELETE" && req.method !== "PATCH") {
     res.status(405).json({ message: "Method not allowed" });
 
     return;
@@ -42,6 +42,61 @@ const handler: NextApiHandler = async (req, res) => {
       return res.status(200).json(project);
     } catch (err) {
       return res.status(500).json({ message: "Couldn't get project" });
+    }
+  }
+
+  if (req.method === "PATCH") {
+    if (!session) {
+      res.status(401).json({ message: "You must be logged in" });
+
+      return;
+    }
+
+    try {
+      const project = await prisma.project.findUnique({
+        where: {
+          slug,
+        },
+      });
+
+      if (!project) {
+        return res.status(404).json({ message: "Project not found" });
+      }
+
+      if (project.userId !== session.user.id) {
+        return res.status(403).json({ message: "Unauthorized" });
+      }
+
+      const { title, description, content } = req.body;
+
+      const tags = await prisma.tag.findMany({
+        where: {
+          id: {
+            in: req.body.tags,
+          },
+        },
+      });
+
+      const updatedProject = await prisma.project.update({
+        where: {
+          slug,
+        },
+        data: {
+          title,
+          description,
+          content,
+          tags: {
+            connect: tags.map((tag) => ({ id: tag.id })),
+          },
+        },
+        include: {
+          tags: true,
+        },
+      });
+
+      return res.status(200).json(updatedProject);
+    } catch (err) {
+      return res.status(500).json({ message: "Couldn't update project" });
     }
   }
 
