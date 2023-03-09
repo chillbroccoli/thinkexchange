@@ -61,11 +61,6 @@ export function Project({ project }: { project?: ProjectResponse }) {
 }
 
 const styles = createStyles((theme) => ({
-  avatar: {
-    textTransform: "uppercase",
-    border: `1px solid ${theme.colors.teal[5]}`,
-  },
-
   main: {
     border: `1px solid ${theme.colors.gray[3]}`,
     borderRadius: theme.radius.sm,
