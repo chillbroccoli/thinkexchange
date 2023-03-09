@@ -9,6 +9,7 @@ import {
 } from "@mantine/core";
 import { useSession } from "next-auth/react";
 
+import { Comments } from "~/components/comment/Comments";
 import { ProjectResponse } from "~/utils/schemas/project.schema";
 
 import { SettingsMenu } from "./SettingsMenu";
@@ -54,7 +55,7 @@ export function Project({ project }: { project?: ProjectResponse }) {
         </Box>
       </Flex>
 
-      {/* <Comments /> */}
+      <Comments />
     </Box>
   );
 }
