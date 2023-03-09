@@ -138,4 +138,31 @@ export const project = {
       options
     );
   },
+
+  useTagProjects: (
+    { tag }: { tag: string },
+    options?: UseQueryOptions<ProjectResponse[], Error>
+  ) => {
+    return useQuery<ProjectResponse[], Error>(
+      [QUERY_KEYS.TAG_PROJECTS, tag],
+      async () => {
+        const { json } = await API.get([APIRoutes.TAG_PROJECTS, { tag }]);
+
+        return json as ProjectResponse[];
+      },
+      options
+    );
+  },
+
+  useLatestProjects: (options?: UseQueryOptions<ProjectResponse[], Error>) => {
+    return useQuery<ProjectResponse[], Error>(
+      [QUERY_KEYS.LATEST_PROJECTS],
+      async () => {
+        const { json } = await API.get(APIRoutes.LATEST_PROJECTS);
+
+        return json as ProjectResponse[];
+      },
+      options
+    );
+  },
 };
