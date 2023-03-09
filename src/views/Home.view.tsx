@@ -1,8 +1,9 @@
-import { Container, Grid } from "@mantine/core";
+import { Container, Flex, Grid } from "@mantine/core";
 import { useEffect } from "react";
 
 import { MainLayout } from "~/components/layouts/MainLayout";
 import { Feed } from "~/components/project/Feed";
+import { MiniList } from "~/components/project/MiniList";
 import { NotFoundState } from "~/components/project/NotFoundState";
 import { Tags } from "~/components/tag/Tags";
 import { api } from "~/utils/api";
@@ -20,6 +21,14 @@ export function HomeView() {
     }
   );
 
+  const { data: frontendData, isLoading: isFrontendDataLoading } = api.project.useTagProjects({
+    tag: "frontend",
+  });
+
+  const { data: backendData, isLoading: isBackendDataLoading } = api.project.useTagProjects({
+    tag: "backend",
+  });
+
   const projects = data?.pages.flatMap((page) => page.projects) ?? [];
 
   useEffect(() => {
@@ -35,11 +44,16 @@ export function HomeView() {
           <Grid.Col span={3}>
             <Tags />
           </Grid.Col>
-          <Grid.Col span={7}>
+          <Grid.Col span={6}>
             <Feed data={projects} isLoading={isLoading} />
             {!hasNextPage && projects.length > 0 && <NotFoundState />}
           </Grid.Col>
-          <Grid.Col span={2}>3</Grid.Col>
+          <Grid.Col span={3}>
+            <Flex direction="column" gap={20}>
+              <MiniList title="frontend" data={frontendData} isLoading={isFrontendDataLoading} />
+              <MiniList title="backend" data={backendData} isLoading={isBackendDataLoading} />
+            </Flex>
+          </Grid.Col>
         </Grid>
       </Container>
     </MainLayout>
