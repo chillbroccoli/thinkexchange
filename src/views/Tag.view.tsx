@@ -7,7 +7,6 @@ import { useEffect } from "react";
 
 import { MainLayout } from "~/components/layouts/MainLayout";
 import { Feed } from "~/components/project/Feed";
-import { NotFoundState } from "~/components/project/NotFoundState";
 import { api } from "~/utils/api";
 import { ClientRoutes } from "~/utils/constants/routes";
 import { pluralizeCount } from "~/utils/helpers/pluralizeCount";
@@ -68,7 +67,6 @@ export function TagView() {
           </Grid.Col>
           <Grid.Col span={7}>
             <Feed data={projects} isLoading={isLoading} />
-            {!hasNextPage && projects.length > 0 && <NotFoundState />}
           </Grid.Col>
           <Grid.Col span={2}></Grid.Col>
         </Grid>
