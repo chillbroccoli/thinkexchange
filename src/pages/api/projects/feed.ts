@@ -13,6 +13,7 @@ const handler: NextApiHandler = async (req, res) => {
       where: {
         title: {
           contains: query,
+          mode: "insensitive",
         },
         tags: {
           some: {
