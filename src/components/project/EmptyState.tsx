@@ -1,10 +1,12 @@
 import { Button, Flex, Text, useMantineTheme } from "@mantine/core";
 import { IconFolderPlus, IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 import { ClientRoutes } from "~/utils/constants/routes";
 
 export function EmptyState() {
+  const { data: session } = useSession();
   const theme = useMantineTheme();
 
   return (
@@ -13,15 +15,19 @@ export function EmptyState() {
       <Text fz="lg" fw={600} my={4}>
         No projects found
       </Text>
-      <Text my={4}>Get started by creating one</Text>
-      <Button
-        component={Link}
-        href={ClientRoutes.NEW_PROJECT}
-        mt={10}
-        leftIcon={<IconPlus size={20} />}
-      >
-        New Project
-      </Button>
+      {session?.user && (
+        <>
+          <Text my={4}>Get started by creating one</Text>
+          <Button
+            component={Link}
+            href={ClientRoutes.NEW_PROJECT}
+            mt={10}
+            leftIcon={<IconPlus size={20} />}
+          >
+            New Project
+          </Button>
+        </>
+      )}
     </Flex>
   );
 }
