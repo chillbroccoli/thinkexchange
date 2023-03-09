@@ -21,11 +21,11 @@ export function HomeView() {
     }
   );
 
-  const { data: frontendData, isLoading: isFrontendDataLoading } = api.project.useTagProjects({
+  const { data: frontendData } = api.project.useTagProjects({
     tag: "frontend",
   });
 
-  const { data: backendData, isLoading: isBackendDataLoading } = api.project.useTagProjects({
+  const { data: backendData } = api.project.useTagProjects({
     tag: "backend",
   });
 
@@ -50,8 +50,8 @@ export function HomeView() {
           </Grid.Col>
           <Grid.Col span={3}>
             <Flex direction="column" gap={20}>
-              <MiniList title="frontend" data={frontendData} isLoading={isFrontendDataLoading} />
-              <MiniList title="backend" data={backendData} isLoading={isBackendDataLoading} />
+              <MiniList title="frontend" data={frontendData} />
+              <MiniList title="backend" data={backendData} />
             </Flex>
           </Grid.Col>
         </Grid>

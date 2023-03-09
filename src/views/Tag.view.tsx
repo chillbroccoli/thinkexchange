@@ -34,8 +34,7 @@ export function TagView() {
     }
   );
 
-  const { data: latestProjects, isLoading: isLatestProjectsLoading } =
-    api.project.useLatestProjects();
+  const { data: latestProjects } = api.project.useLatestProjects();
 
   const projects = data?.pages.flatMap((page) => page.projects) ?? [];
 
@@ -73,7 +72,7 @@ export function TagView() {
             <Feed data={projects} isLoading={isLoading} />
           </Grid.Col>
           <Grid.Col span={3}>
-            <MiniList title="Latest" data={latestProjects} isLoading={isLatestProjectsLoading} />
+            <MiniList title="Latest" data={latestProjects} />
           </Grid.Col>
         </Grid>
       </Container>

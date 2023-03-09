@@ -6,23 +6,11 @@ import { Routing } from "~/utils/api/Routing";
 import { ClientRoutes } from "~/utils/constants/routes";
 import { ProjectResponse } from "~/utils/schemas/project.schema";
 
-import { Spinner } from "../Spinner";
-
-export function MiniList({
-  title,
-  data,
-  isLoading,
-}: {
-  title: string;
-  data?: ProjectResponse[];
-  isLoading: boolean;
-}) {
+export function MiniList({ title, data }: { title: string; data?: ProjectResponse[] }) {
   const { classes } = styles();
   const theme = useMantineTheme();
 
-  if (isLoading) {
-    return <Spinner />;
-  }
+  if (!data) return null;
 
   return (
     <Box p={10} px={14} className={classes.main}>
