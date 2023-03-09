@@ -1,4 +1,4 @@
-import { Box, Container, Text } from "@mantine/core";
+import { Box, Container, Grid, Text } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -41,16 +41,21 @@ export function SearchView() {
   return (
     <MainLayout>
       <Container size="lg" mt={20}>
-        <Box w="50%" mx="auto">
-          <Text fz="xl" color="gray.8" fw={500}>
-            Search results for: {router.query?.q}
-          </Text>
+        <Grid gutter={10}>
+          <Grid.Col span={3}></Grid.Col>
+          <Grid.Col span={6}>
+            <Box>
+              <Text fz="xl" color="gray.8" fw={500}>
+                Search results for: {router.query?.q}
+              </Text>
 
-          <Box mt={20}>
-            <Feed data={projects} isLoading={isLoading} />
-            {!hasNextPage && projects.length && <NotFoundState />}
-          </Box>
-        </Box>
+              <Box mt={20}>
+                <Feed data={projects} isLoading={isLoading} />
+                {!hasNextPage && projects.length > 0 && <NotFoundState />}
+              </Box>
+            </Box>
+          </Grid.Col>
+        </Grid>
       </Container>
     </MainLayout>
   );
