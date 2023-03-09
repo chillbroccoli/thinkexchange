@@ -2,6 +2,7 @@ import { Button, Container, createStyles, Divider, Flex, Grid, Text, Title } fro
 import { IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 
 import { MainLayout } from "~/components/layouts/MainLayout";
@@ -13,6 +14,7 @@ import { pluralizeCount } from "~/utils/helpers/pluralizeCount";
 import { useScrollPosition } from "~/utils/hooks/useScrollPosition";
 
 export function TagView() {
+  const { data: session } = useSession();
   const { classes } = styles();
 
   const router = useRouter();
@@ -48,13 +50,15 @@ export function TagView() {
               <Title order={2} transform="capitalize" mb={8}>
                 {router.query?.tag}
               </Title>
-              <Button
-                component={Link}
-                href={ClientRoutes.NEW_PROJECT}
-                leftIcon={<IconPlus size={20} />}
-              >
-                New Project
-              </Button>
+              {session?.user && (
+                <Button
+                  component={Link}
+                  href={ClientRoutes.NEW_PROJECT}
+                  leftIcon={<IconPlus size={20} />}
+                >
+                  New Project
+                </Button>
+              )}
 
               <Divider my="sm" />
 
