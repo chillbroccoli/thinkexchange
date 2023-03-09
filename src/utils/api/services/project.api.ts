@@ -114,4 +114,28 @@ export const project = {
       return json as BookmarkResponse;
     }, options);
   },
+
+  useUserProjects: (options?: UseQueryOptions<ProjectResponse[], Error>) => {
+    return useQuery<ProjectResponse[], Error>(
+      [QUERY_KEYS.USER_PROJECTS],
+      async () => {
+        const { json } = await API.get(APIRoutes.USER_PROJECTS);
+
+        return json as ProjectResponse[];
+      },
+      options
+    );
+  },
+
+  useUserBookmarks: (options?: UseQueryOptions<ProjectResponse[], Error>) => {
+    return useQuery<ProjectResponse[], Error>(
+      [QUERY_KEYS.USER_BOOKMARKS],
+      async () => {
+        const { json } = await API.get(APIRoutes.USER_BOOKMARKS);
+
+        return json as ProjectResponse[];
+      },
+      options
+    );
+  },
 };
