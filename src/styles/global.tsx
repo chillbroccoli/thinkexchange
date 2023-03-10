@@ -12,7 +12,7 @@ export function GlobalStyles() {
 
         "html, body": {
           height: "100%",
-          backgroundColor: theme.colors.gray[0],
+          backgroundColor: theme.fn.rgba(theme.colors.gray[0], 0.1),
         },
       })}
     />
