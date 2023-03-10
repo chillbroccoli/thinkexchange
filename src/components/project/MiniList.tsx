@@ -1,14 +1,13 @@
-import { Box, createStyles, Divider, Flex, Text, useMantineTheme } from "@mantine/core";
-import { IconBookmark, IconHeart, IconMessage2 } from "@tabler/icons-react";
+import { Box, createStyles, Divider, Flex, Text } from "@mantine/core";
 import Link from "next/link";
 
 import { Routing } from "~/utils/api/Routing";
 import { ClientRoutes } from "~/utils/constants/routes";
+import { dayjs } from "~/utils/dayjs";
 import { ProjectResponse } from "~/utils/schemas/project.schema";
 
 export function MiniList({ title, data }: { title: string; data?: ProjectResponse[] }) {
   const { classes } = styles();
-  const theme = useMantineTheme();
 
   if (!data) return null;
 
@@ -26,27 +25,10 @@ export function MiniList({ title, data }: { title: string; data?: ProjectRespons
             className={classes.link}
           >
             <Flex direction="column" p={4} px={8} className={classes.item}>
-              <Text color="gray.8"># {project.title}</Text>
-              <Flex gap={10} mt={6}>
-                <Flex>
-                  <IconHeart size={18} color={theme.colors.red[5]} />
-                  <Text ml={4} color="gray.8">
-                    {project._count.likes}
-                  </Text>
-                </Flex>
-                <Flex>
-                  <IconBookmark size={18} color={theme.colors.gray[8]} />
-                  <Text ml={4} color="gray.8">
-                    {project._count.bookmarks}
-                  </Text>
-                </Flex>
-                <Flex>
-                  <IconMessage2 size={18} color={theme.colors.blue[5]} />
-                  <Text ml={4} color="gray.8">
-                    {project._count.comments}
-                  </Text>
-                </Flex>
-              </Flex>
+              <Text color="gray.8" fz="lg" fw={300}>
+                # {project.title}
+              </Text>
+              <Text>{dayjs(project.createdAt).format("MMM D, YYYY")}</Text>
             </Flex>
           </Link>
         ))}
@@ -64,12 +46,12 @@ const styles = createStyles((theme) => ({
   },
 
   item: {
-    border: `1px solid ${theme.colors.indigo[2]}`,
     borderRadius: theme.radius.sm,
     color: theme.colors.indigo[9],
+    backgroundColor: theme.colors.indigo[0],
 
     "&:hover": {
-      backgroundColor: theme.colors.indigo[1],
+      backgroundColor: theme.fn.rgba(theme.colors.indigo[1], 0.85),
     },
   },
 
