@@ -35,12 +35,14 @@ const handler: NextApiHandler = async (req, res) => {
         bookmarks: true,
         _count: true,
       },
-      orderBy: {
-        createdAt: "desc",
-      },
+      orderBy: [
+        {
+          createdAt: "desc",
+        },
+      ],
     });
 
-    return res.status(200).json({ projects });
+    return res.status(200).json(projects);
   } catch (err) {
     return res.status(500).json({ message: "Couldn't load projects" });
   }
