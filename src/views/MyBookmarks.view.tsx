@@ -9,11 +9,11 @@ export function MyBookmarksView() {
   const { data, isLoading } = api.project.useUserBookmarks();
 
   return (
-    <MainLayout>
+    <MainLayout showLoader={isLoading}>
       <Container size="lg" mt={20}>
         <Box w="50%" mx="auto">
           <Box mt={20}>
-            <Feed data={data} isLoading={isLoading} showEmptyState={false} />
+            <Feed data={data} showEmptyState={false} />
             {!data?.length && <BookmarksNotFound />}
           </Box>
         </Box>
