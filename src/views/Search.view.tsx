@@ -15,7 +15,14 @@ export function SearchView() {
 
   const scrollPosition = useScrollPosition();
 
-  const { data, isLoading, hasNextPage, isFetching, fetchNextPage, refetch } = api.project.useFeed(
+  const {
+    data,
+    isLoading: isFeedLoading,
+    hasNextPage,
+    isFetching,
+    fetchNextPage,
+    refetch,
+  } = api.project.useFeed(
     {
       limit: 5,
       query: q,
@@ -39,7 +46,7 @@ export function SearchView() {
   }, [router.query?.q, refetch]);
 
   return (
-    <MainLayout>
+    <MainLayout showLoader={isFeedLoading}>
       <Container size="lg" mt={20}>
         <Grid gutter={10}>
           <Grid.Col span={3}></Grid.Col>
@@ -50,7 +57,7 @@ export function SearchView() {
               </Text>
 
               <Box mt={20}>
-                <Feed data={projects} isLoading={isLoading} />
+                <Feed data={projects} />
                 {!hasNextPage && projects.length > 0 && <NotFoundState />}
               </Box>
             </Box>
