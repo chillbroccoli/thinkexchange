@@ -5,7 +5,6 @@ import { AuthorCard } from "~/components/author/AuthorCard";
 import { MainLayout } from "~/components/layouts/MainLayout";
 import { Project } from "~/components/project/Project";
 import { Stats } from "~/components/project/Stats";
-import { Spinner } from "~/components/Spinner";
 import { api } from "~/utils/api";
 
 export function ProjectView() {
@@ -22,7 +21,7 @@ export function ProjectView() {
   );
 
   return (
-    <MainLayout>
+    <MainLayout showLoader={isLoading}>
       <Container size="lg" mt={20} pb={20}>
         {data && (
           <Grid gutter={10}>
@@ -37,7 +36,6 @@ export function ProjectView() {
             </Grid.Col>
           </Grid>
         )}
-        {isLoading && <Spinner />}
       </Container>
     </MainLayout>
   );
