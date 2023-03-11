@@ -11,7 +11,7 @@ import { ProjectResponse } from "~/utils/schemas/project.schema";
 export function ProjectCard({ project }: { project: ProjectResponse }) {
   const { classes } = styles();
 
-  const { slug, title, description, tags, updatedAt, user } = project;
+  const { slug, title, description, tags, createdAt, user } = project;
 
   return (
     <Box className={classes.main} px={20} py={10}>
@@ -23,7 +23,7 @@ export function ProjectCard({ project }: { project: ProjectResponse }) {
             {user.name}
           </Text>
           <Text fz="xs" fw={300} color="gray.6">
-            {dayjs(updatedAt).format("MMM DD, YYYY")}
+            {dayjs(createdAt).format("MMM DD, YYYY")}
           </Text>
         </Flex>
       </Flex>
