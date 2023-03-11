@@ -23,7 +23,13 @@ export function TagView() {
 
   const scrollPosition = useScrollPosition();
 
-  const { data, isLoading, hasNextPage, isFetching, fetchNextPage } = api.project.useFeed(
+  const {
+    data,
+    isLoading: isFeedLoading,
+    hasNextPage,
+    isFetching,
+    fetchNextPage,
+  } = api.project.useFeed(
     {
       limit: 5,
       tag,
@@ -34,7 +40,7 @@ export function TagView() {
     }
   );
 
-  const { data: latestProjects } = api.project.useLatestProjects();
+  const { data: latestProjects, isLoading: isLatestLoading } = api.project.useLatestProjects();
 
   const projects = data?.pages.flatMap((page) => page.projects) ?? [];
 
@@ -44,8 +50,10 @@ export function TagView() {
     }
   }, [scrollPosition, hasNextPage, isFetching, fetchNextPage]);
 
+  const isLoading = isFeedLoading || isLatestLoading;
+
   return (
-    <MainLayout>
+    <MainLayout showLoader={isLoading}>
       <Container size="lg" mt={20}>
         <Grid gutter={10}>
           <Grid.Col span={3}>
@@ -69,7 +77,7 @@ export function TagView() {
             </Flex>
           </Grid.Col>
           <Grid.Col span={6}>
-            <Feed data={projects} isLoading={isLoading} />
+            <Feed data={projects} />
           </Grid.Col>
           <Grid.Col span={3}>
             <MiniList title="Latest" data={latestProjects} />
