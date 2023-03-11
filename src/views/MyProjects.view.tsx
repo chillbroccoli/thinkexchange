@@ -8,11 +8,11 @@ export function MyProjectsView() {
   const { data, isLoading } = api.project.useUserProjects();
 
   return (
-    <MainLayout>
+    <MainLayout showLoader={isLoading}>
       <Container size="lg" mt={20}>
         <Box w="50%" mx="auto">
           <Box mt={20}>
-            <Feed data={data} isLoading={isLoading} />
+            <Feed data={data} />
           </Box>
         </Box>
       </Container>
