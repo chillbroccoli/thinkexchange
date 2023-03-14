@@ -1,4 +1,5 @@
-import { Container, Flex, Grid } from "@mantine/core";
+import { Box, Container, Flex, Grid, MediaQuery } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useEffect } from "react";
 
 import { MainLayout } from "~/components/layouts/MainLayout";
@@ -11,6 +12,7 @@ import { useScrollPosition } from "~/utils/hooks/useScrollPosition";
 
 export function HomeView() {
   const scrollPosition = useScrollPosition();
+  const smallScreen = useMediaQuery("(min-width: 48em)");
 
   const {
     data,
@@ -48,21 +50,30 @@ export function HomeView() {
   return (
     <MainLayout showLoader={isLoading}>
       <Container size="lg" mt={20}>
-        <Grid gutter={10}>
-          <Grid.Col span={3}>
-            <Tags />
-          </Grid.Col>
-          <Grid.Col span={6}>
+        <MediaQuery smallerThan="md" styles={{ display: "none" }}>
+          <Grid gutter={10}>
+            <Grid.Col span={3}>
+              <Tags />
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Feed data={projects} />
+              {!hasNextPage && projects.length > 0 && <NotFoundState />}
+            </Grid.Col>
+            <Grid.Col span={3}>
+              <Flex direction="column" gap={20}>
+                <MiniList title="frontend" data={frontendData} />
+                <MiniList title="backend" data={backendData} />
+              </Flex>
+            </Grid.Col>
+          </Grid>
+        </MediaQuery>
+
+        <MediaQuery largerThan="md" styles={{ display: "none" }}>
+          <Box w={smallScreen ? "70%" : "90%"} mx="auto">
             <Feed data={projects} />
             {!hasNextPage && projects.length > 0 && <NotFoundState />}
-          </Grid.Col>
-          <Grid.Col span={3}>
-            <Flex direction="column" gap={20}>
-              <MiniList title="frontend" data={frontendData} />
-              <MiniList title="backend" data={backendData} />
-            </Flex>
-          </Grid.Col>
-        </Grid>
+          </Box>
+        </MediaQuery>
       </Container>
     </MainLayout>
   );
