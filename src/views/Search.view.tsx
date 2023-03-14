@@ -1,4 +1,5 @@
-import { Box, Container, Grid, Text } from "@mantine/core";
+import { Box, Container, Text } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -10,6 +11,7 @@ import { useScrollPosition } from "~/utils/hooks/useScrollPosition";
 
 export function SearchView() {
   const router = useRouter();
+  const smallScreen = useMediaQuery("(min-width: 48em)");
 
   const { q } = router.query as { q: string };
 
@@ -48,21 +50,16 @@ export function SearchView() {
   return (
     <MainLayout showLoader={isFeedLoading}>
       <Container size="lg" mt={20}>
-        <Grid gutter={10}>
-          <Grid.Col span={3}></Grid.Col>
-          <Grid.Col span={6}>
-            <Box>
-              <Text fz="xl" color="gray.8" fw={500}>
-                Search results for: {router.query?.q}
-              </Text>
+        <Box w={smallScreen ? "70%" : "90%"} mx="auto">
+          <Text fz="xl" color="gray.8" fw={500}>
+            Search results for: {router.query?.q}
+          </Text>
 
-              <Box mt={20}>
-                <Feed data={projects} />
-                {!hasNextPage && projects.length > 0 && <NotFoundState />}
-              </Box>
-            </Box>
-          </Grid.Col>
-        </Grid>
+          <Box mt={20}>
+            <Feed data={projects} />
+            {!hasNextPage && projects.length > 0 && <NotFoundState />}
+          </Box>
+        </Box>
       </Container>
     </MainLayout>
   );
