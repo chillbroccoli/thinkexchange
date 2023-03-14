@@ -39,47 +39,53 @@ export function MenuDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
         <Box>
           <SearchBar />
 
-          <Popover width={225} position="top-start" shadow="md">
-            <Popover.Target>
-              <Flex direction="column" px={10} py={14} mt={15} className={classes.profile}>
-                <Flex>
-                  <Avatar src={session?.user?.image} alt="Avatar" />
+          {session?.user ? (
+            <Popover width={225} position="top-start" shadow="md">
+              <Popover.Target>
+                <Flex direction="column" px={10} py={14} mt={15} className={classes.profile}>
+                  <Flex>
+                    <Avatar src={session?.user?.image} alt="Avatar" />
 
-                  <Flex direction="column" ml={10}>
-                    <Text fw={500} color="gray.8">
-                      {session?.user.name}
-                    </Text>
-                    <Text fz="xs" fw={300} color="gray.6">
-                      {session?.user.email}
-                    </Text>
+                    <Flex direction="column" ml={10}>
+                      <Text fw={500} color="gray.8">
+                        {session?.user.name}
+                      </Text>
+                      <Text fz="xs" fw={300} color="gray.6">
+                        {session?.user.email}
+                      </Text>
+                    </Flex>
                   </Flex>
                 </Flex>
-              </Flex>
-            </Popover.Target>
-            <Popover.Dropdown>
-              <Flex direction="column">
-                {profileNav.map((item) => (
-                  <Link key={item.name} href={item.href} className={classes.link}>
-                    {item.name}
-                  </Link>
-                ))}
+              </Popover.Target>
+              <Popover.Dropdown>
+                <Flex direction="column">
+                  {profileNav.map((item) => (
+                    <Link key={item.name} href={item.href} className={classes.link}>
+                      {item.name}
+                    </Link>
+                  ))}
 
-                <Divider my="sm" />
+                  <Divider my="sm" />
 
-                <Button
-                  fullWidth
-                  onClick={() =>
-                    void signOut({
-                      redirect: true,
-                      callbackUrl: ClientRoutes.HOME,
-                    })
-                  }
-                >
-                  Log out
-                </Button>
-              </Flex>
-            </Popover.Dropdown>
-          </Popover>
+                  <Button
+                    fullWidth
+                    onClick={() =>
+                      void signOut({
+                        redirect: true,
+                        callbackUrl: ClientRoutes.HOME,
+                      })
+                    }
+                  >
+                    Log out
+                  </Button>
+                </Flex>
+              </Popover.Dropdown>
+            </Popover>
+          ) : (
+            <Button variant="outline" mt={15} fullWidth component={Link} href={ClientRoutes.LOGIN}>
+              Log in
+            </Button>
+          )}
         </Box>
       </Flex>
     </Drawer>
