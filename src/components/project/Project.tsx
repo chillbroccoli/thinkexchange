@@ -7,6 +7,7 @@ import {
   Title,
   TypographyStylesProvider,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useSession } from "next-auth/react";
 
 import { Comments } from "~/components/comment/Comments";
@@ -16,7 +17,7 @@ import { SettingsMenu } from "./SettingsMenu";
 
 export function Project({ project }: { project?: ProjectResponse }) {
   const { data: session } = useSession();
-
+  const smallScreen = useMediaQuery("(min-width: 48em)");
   const { classes } = styles();
 
   if (!project) return null;
@@ -24,7 +25,7 @@ export function Project({ project }: { project?: ProjectResponse }) {
   const { title, description, content, tags, user } = project;
 
   return (
-    <Box px={40} p={10} className={classes.main}>
+    <Box px={smallScreen ? 40 : 20} p={10} className={classes.main}>
       {user.id === session?.user.id && <SettingsMenu />}
 
       <Flex direction="column" mt={14}>
