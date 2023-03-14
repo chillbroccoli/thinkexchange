@@ -13,7 +13,7 @@ import { api } from "~/utils/api";
 import { QUERY_KEYS } from "~/utils/constants/keys";
 import { queryClient } from "~/utils/queryClient";
 
-export function Stats() {
+export function Stats({ position = "vertical" }: { position?: "vertical" | "horizontal" }) {
   const { data: session } = useSession();
 
   const router = useRouter();
@@ -44,7 +44,11 @@ export function Stats() {
   const isBookmarked = data?.bookmarks?.find((bookmark) => bookmark.userId === session?.user.id);
 
   return (
-    <Flex direction="column" gap={20}>
+    <Flex
+      direction={position === "vertical" ? "column" : "row"}
+      justify={position === "horizontal" ? "center" : "flex-start"}
+      gap={20}
+    >
       <Flex direction="column" align="center" justify="center">
         {isLiked ? (
           <ActionIcon color="red.5" onClick={() => like({ slug })}>
