@@ -9,7 +9,6 @@ import { ClientRoutes } from "~/utils/constants/routes";
 
 export function SettingsMenu() {
   const { classes } = styles();
-
   const router = useRouter();
 
   const { slug } = router.query as { slug: string };
@@ -25,7 +24,7 @@ export function SettingsMenu() {
   });
 
   return (
-    <Menu shadow="lg" width={200}>
+    <Menu shadow="lg" width={200} position="bottom-end">
       <Menu.Target>
         <ActionIcon className={classes.button}>
           <IconSettings />
