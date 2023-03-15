@@ -5,14 +5,14 @@ import { api } from "~/utils/api";
 import { Routing } from "~/utils/api/Routing";
 import { ClientRoutes } from "~/utils/constants/routes";
 
-export function TagList() {
+export function TagList({ height = 505 }: { height?: number }) {
   const router = useRouter();
   const { classes } = styles();
 
   const { data } = api.tag.useAll();
 
   return (
-    <ScrollArea className={classes.container}>
+    <ScrollArea h={height}>
       <Flex direction="column">
         {data &&
           data.map((tag) => (
@@ -38,10 +38,6 @@ export function TagList() {
 }
 
 const styles = createStyles((theme) => ({
-  container: {
-    height: 505,
-  },
-
   tagButton: {
     borderRadius: theme.radius.md,
     color: theme.colors.gray[7],
