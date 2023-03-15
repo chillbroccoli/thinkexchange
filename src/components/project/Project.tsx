@@ -35,7 +35,7 @@ export function Project({ project }: { project?: ProjectResponse }) {
           </Title>
         </Box>
 
-        <Flex mt={10} gap={10}>
+        <Flex mt={10} gap={10} wrap="wrap">
           {tags.map((tag) => (
             <Badge key={tag.id} variant="outline" radius="md">
               # {tag.name}
