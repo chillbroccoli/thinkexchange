@@ -32,7 +32,7 @@ export function MenuDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
             <Logo />
           </Box>
           <Box mt={20} className={classes.tagList} pb={8}>
-            <TagList />
+            <TagList height={430} />
           </Box>
         </Box>
 
