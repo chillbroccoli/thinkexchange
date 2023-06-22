@@ -1,7 +1,5 @@
-import { Box, Flex } from "@mantine/core";
-
-import { EmptyState } from "~/components/project/EmptyState";
-import { ProjectCard } from "~/components/project/ProjectCard";
+import { EmptyState } from "~/components/atoms/EmptyState";
+import { ProjectCard } from "~/components/molecules/ProjectCard";
 import { ProjectResponse } from "~/utils/schemas/project.schema";
 
 export function Feed({
@@ -14,12 +12,12 @@ export function Feed({
   if (showEmptyState && !data?.length) return <EmptyState />;
 
   return (
-    <Box>
-      <Flex direction="column" gap={20}>
+    <div>
+      <div className="flex flex-col gap-5">
         {data &&
           data.length > 0 &&
           data.map((project) => <ProjectCard key={project.id} project={project} />)}
-      </Flex>
-    </Box>
+      </div>
+    </div>
   );
 }
