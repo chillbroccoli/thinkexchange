@@ -1,21 +1,9 @@
-import { createStyles, Flex, Loader } from "@mantine/core";
+import { IconLoader2 } from "@tabler/icons-react";
 
 export function LoaderLayout() {
-  const { classes } = styles();
-
   return (
-    <Flex w="100%" h="100%" align="center" justify="center" className={classes.main}>
-      <Loader />
-    </Flex>
+    <div className="absolute inset-0 flex items-center justify-center w-full h-full">
+      <IconLoader2 size={32} className="animate-spin" />
+    </div>
   );
 }
-
-const styles = createStyles(() => ({
-  main: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-}));

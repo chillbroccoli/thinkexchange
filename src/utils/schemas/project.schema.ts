@@ -31,7 +31,10 @@ export const createProjectSchema = z.object({
   description: z
     .string({ required_error: "Description is required" })
     .min(50, "Description must be at least 50 characters long"),
-  tags: z.array(z.string()).min(1, "At least 1 tag is required"),
+  tags: z
+    .array(z.object({ id: z.string(), name: z.string() }))
+    .min(1, "At least 1 tag is required")
+    .max(4, "Maximum 4 tags allowed"),
   content: z
     .string({ required_error: "Content is required" })
     .min(200, "Content must be at least 200 characters long"),

@@ -1,18 +1,15 @@
-import { Box, Container, Flex, Grid, MediaQuery } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { useEffect } from "react";
 
+import { Feed } from "~/components/atoms/Feed";
+import { MiniList } from "~/components/atoms/MiniList";
+import { NotFoundState } from "~/components/atoms/NotFoundState";
+import { Tags } from "~/components/atoms/Tags";
 import { MainLayout } from "~/components/layouts/MainLayout";
-import { Feed } from "~/components/project/Feed";
-import { MiniList } from "~/components/project/MiniList";
-import { NotFoundState } from "~/components/project/NotFoundState";
-import { Tags } from "~/components/tag/Tags";
 import { api } from "~/utils/api";
 import { useScrollPosition } from "~/utils/hooks/useScrollPosition";
 
 export function HomeView() {
   const scrollPosition = useScrollPosition();
-  const smallScreen = useMediaQuery("(min-width: 48em)");
 
   const {
     data,
@@ -49,32 +46,32 @@ export function HomeView() {
 
   return (
     <MainLayout showLoader={isLoading}>
-      <Container size="lg" mt={20}>
-        <MediaQuery smallerThan="md" styles={{ display: "none" }}>
-          <Grid gutter={10}>
-            <Grid.Col span={3}>
+      <div className="max-w-6xl mx-auto mt-5">
+        <div className="hidden md:block">
+          <div className="grid grid-cols-12 gap-3">
+            <div className="col-span-3">
               <Tags />
-            </Grid.Col>
-            <Grid.Col span={6}>
+            </div>
+            <div className="col-span-6">
               <Feed data={projects} />
               {!hasNextPage && projects.length > 0 && <NotFoundState />}
-            </Grid.Col>
-            <Grid.Col span={3}>
-              <Flex direction="column" gap={20}>
+            </div>
+            <div className="col-span-3">
+              <div className="flex flex-col gap-5">
                 <MiniList title="frontend" data={frontendData} />
                 <MiniList title="backend" data={backendData} />
-              </Flex>
-            </Grid.Col>
-          </Grid>
-        </MediaQuery>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <MediaQuery largerThan="md" styles={{ display: "none" }}>
-          <Box w={smallScreen ? "70%" : "90%"} mx="auto">
+        <div className="md:hidden">
+          <div className="mx-auto w-[90%] sm:w-[75%]">
             <Feed data={projects} />
             {!hasNextPage && projects.length > 0 && <NotFoundState />}
-          </Box>
-        </MediaQuery>
-      </Container>
+          </div>
+        </div>
+      </div>
     </MainLayout>
   );
 }

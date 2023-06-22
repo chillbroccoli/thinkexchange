@@ -5,7 +5,7 @@ import { ClientRoutes } from "~/utils/constants/routes";
 import { authOptions } from "~/utils/server/auth";
 
 type Props = {
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 export const requireAuth = async (

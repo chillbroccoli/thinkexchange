@@ -1,9 +1,9 @@
-import { Box, Button, Flex, Title } from "@mantine/core";
 import { IconBrandGithub } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 
 import { AuthLayout } from "~/components/layouts/AuthLayout";
+import { Button } from "~/components/ui/Button";
 import { ClientRoutes } from "~/utils/constants/routes";
 
 export function LoginView() {
@@ -20,22 +20,17 @@ export function LoginView() {
 
   return (
     <AuthLayout>
-      <Flex direction="column" align="center" mb={15}>
-        <Title order={1} fw={500} color="gray.8">
-          Welcome back
-        </Title>
-        <Box mt={20}>
-          <Flex align="center" justify="center">
-            <Button
-              variant="outline"
-              leftIcon={<IconBrandGithub size={20} />}
-              onClick={githubLogin}
-            >
-              Log in with Github
+      <div className="flex flex-col items-center mb-3">
+        <h1 className="font-medium gray-800">Welcome back</h1>
+        <div className="mt-4">
+          <div className="flex items-center justify-center">
+            <Button className="flex items-center space-x-1" onClick={githubLogin}>
+              <IconBrandGithub />
+              <span>Log in with Github</span>
             </Button>
-          </Flex>
-        </Box>
-      </Flex>
+          </div>
+        </div>
+      </div>
     </AuthLayout>
   );
 }

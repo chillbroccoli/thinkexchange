@@ -1,11 +1,11 @@
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Flex, Modal } from "@mantine/core";
-import { showNotification } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { api } from "~/utils/api";
 import { QUERY_KEYS } from "~/utils/constants/keys";
+import { toast } from "~/utils/helpers/toast";
 import { queryClient } from "~/utils/queryClient";
 import {
   CommentResponse,
@@ -13,16 +13,16 @@ import {
   updateCommentSchema,
 } from "~/utils/schemas/comment.schema";
 
-import { Input } from "../Input";
+import { Button } from "../ui/Button";
+import { Input } from "../ui/Input";
+import { Modal } from "./Modal";
 
 type UpdateCommentModalProps = {
-  opened: boolean;
-  close: () => void;
-  open: () => void;
   comment: CommentResponse;
 };
 
-export function UpdateCommentModal({ opened, close, comment }: UpdateCommentModalProps) {
+export const UpdateCommentModal = NiceModal.create(({ comment }: UpdateCommentModalProps) => {
+  const modal = useModal();
   const router = useRouter();
 
   const { slug } = router.query as { slug: string };
@@ -34,12 +34,12 @@ export function UpdateCommentModal({ opened, close, comment }: UpdateCommentModa
     },
     {
       onSuccess: () => {
-        showNotification({
+        toast({
           title: "Comment updated",
-          message: "Your comment has been updated",
+          description: "Your comment has been updated",
         });
         queryClient.invalidateQueries([QUERY_KEYS.COMMENTS, slug]);
-        close();
+        modal.remove();
       },
     }
   );
@@ -56,21 +56,19 @@ export function UpdateCommentModal({ opened, close, comment }: UpdateCommentModa
   };
 
   return (
-    <Modal centered opened={opened} onClose={close} title="Update comment">
+    <Modal isOpen={modal.visible} onClose={modal.remove} className="w-[350px]">
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Input.Textarea name="content" />
 
-          <Flex justify="flex-end" mt={20} gap={10}>
-            <Button variant="outline" color="gray" onClick={close}>
+          <div className="flex justify-end gap-2 mt-5">
+            <Button intent="lime" onClick={modal.remove}>
               Cancel
             </Button>
-            <Button type="submit" variant="outline" color="orange">
-              Update
-            </Button>
-          </Flex>
+            <Button type="submit">Update</Button>
+          </div>
         </form>
       </FormProvider>
     </Modal>
   );
-}
+});

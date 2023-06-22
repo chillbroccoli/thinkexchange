@@ -1,41 +1,37 @@
-import { MantineProvider } from "@mantine/core";
-import { Notifications } from "@mantine/notifications";
+import "../styles/styles.css";
+import "react-quill/dist/quill.snow.css";
+
+import NiceModal from "@ebay/nice-modal-react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
-import { Poppins } from "next/font/google";
+import { Rubik } from "next/font/google";
 import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from "react-hot-toast";
 
-import { GlobalStyles } from "~/styles/global";
 import { queryClient } from "~/utils/queryClient";
 
-const poppins = Poppins({
-  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
+const rubik = Rubik({
   subsets: ["latin"],
+  weight: ["300", "400", "400", "500", "700", "900"],
 });
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-    <SessionProvider session={session}>
+    <>
       <Head>
         <title>Thinkexchange</title>
       </Head>
-      <QueryClientProvider client={queryClient}>
-        <MantineProvider
-          withGlobalStyles
-          withNormalizeCSS
-          theme={{
-            primaryColor: "indigo",
-            colorScheme: "light",
-            fontFamily: poppins.style.fontFamily,
-            headings: { fontFamily: poppins.style.fontFamily },
-          }}
-        >
-          <GlobalStyles />
-          <Notifications position="top-right" />
-          <Component {...pageProps} />
-        </MantineProvider>
-      </QueryClientProvider>
-    </SessionProvider>
+      <SessionProvider session={session}>
+        <QueryClientProvider client={queryClient}>
+          <NiceModal.Provider>
+            <div className={rubik.className}>
+              <Component {...pageProps} />
+              <Toaster />
+            </div>
+          </NiceModal.Provider>
+        </QueryClientProvider>
+      </SessionProvider>
+    </>
   );
 }

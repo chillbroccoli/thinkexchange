@@ -1,25 +1,13 @@
-import {
-  Box,
-  Button,
-  Container,
-  createStyles,
-  Divider,
-  Flex,
-  Grid,
-  MediaQuery,
-  Text,
-  Title,
-} from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 
+import { Feed } from "~/components/atoms/Feed";
+import { MiniList } from "~/components/atoms/MiniList";
 import { MainLayout } from "~/components/layouts/MainLayout";
-import { Feed } from "~/components/project/Feed";
-import { MiniList } from "~/components/project/MiniList";
+import { Divider } from "~/components/ui/Divider";
+import { LinkButton } from "~/components/ui/LinkButton";
 import { api } from "~/utils/api";
 import { ClientRoutes } from "~/utils/constants/routes";
 import { pluralizeCount } from "~/utils/helpers/pluralizeCount";
@@ -27,8 +15,6 @@ import { useScrollPosition } from "~/utils/hooks/useScrollPosition";
 
 export function TagView() {
   const { data: session } = useSession();
-  const { classes } = styles();
-  const smallScreen = useMediaQuery("(min-width: 48em)");
 
   const router = useRouter();
 
@@ -42,6 +28,7 @@ export function TagView() {
     hasNextPage,
     isFetching,
     fetchNextPage,
+    refetch,
   } = api.project.useFeed(
     {
       limit: 5,
@@ -58,6 +45,12 @@ export function TagView() {
   const projects = data?.pages.flatMap((page) => page.projects) ?? [];
 
   useEffect(() => {
+    if (tag) {
+      refetch();
+    }
+  }, [tag, refetch]);
+
+  useEffect(() => {
     if (scrollPosition > 95 && hasNextPage && !isFetching) {
       fetchNextPage();
     }
@@ -67,73 +60,55 @@ export function TagView() {
 
   return (
     <MainLayout showLoader={isLoading}>
-      <Container size="lg" mt={20}>
-        <MediaQuery smallerThan="md" styles={{ display: "none" }}>
-          <Grid gutter={10}>
-            <Grid.Col span={3}>
-              <Flex direction="column" className={classes.sidebar} p={10} px={14}>
-                <Title order={2} transform="capitalize" mb={8}>
-                  {router.query?.tag}
-                </Title>
+      <div className="max-w-6xl mx-auto mt-5">
+        <div className="hidden md:block">
+          <div className="grid grid-cols-12 gap-5">
+            <div className="col-span-3">
+              <div className="flex flex-col p-3 px-4 bg-white border-2 border-black">
+                <h2 className="mb-2 text-2xl capitalize">{router.query?.tag}</h2>
                 {session?.user && (
-                  <Button
-                    component={Link}
-                    href={ClientRoutes.NEW_PROJECT}
-                    leftIcon={<IconPlus size={20} />}
-                  >
+                  <LinkButton href={ClientRoutes.NEW_PROJECT}>
+                    <IconPlus className="mr-1" size={20} />
                     New Project
-                  </Button>
+                  </LinkButton>
                 )}
 
-                <Divider my="sm" />
+                <Divider className="my-3" />
 
-                <Text>{pluralizeCount(projects.length ?? 0, "post")} found</Text>
-              </Flex>
-            </Grid.Col>
-            <Grid.Col span={6}>
+                <p>{pluralizeCount(projects.length ?? 0, "post")} found</p>
+              </div>
+            </div>
+            <div className="col-span-6">
               <Feed data={projects} />
-            </Grid.Col>
-            <Grid.Col span={3}>
+            </div>
+            <div className="col-span-3">
               <MiniList title="Latest" data={latestProjects} />
-            </Grid.Col>
-          </Grid>
-        </MediaQuery>
+            </div>
+          </div>
+        </div>
 
-        <MediaQuery largerThan="md" styles={{ display: "none" }}>
-          <Box w={smallScreen ? "70%" : "90%"} mx="auto">
-            <Flex direction="column" className={classes.sidebar} p={10} px={14}>
-              <Title order={2} transform="capitalize" mb={8}>
-                {router.query?.tag}
-              </Title>
+        <div className="block md:hidden">
+          <div className="w-[90%] sm:w-[75%] mx-auto">
+            <div className="flex flex-col p-3 px-4 bg-white border-2 border-black">
+              <h2 className="mb-2 text-2xl capitalize">{router.query?.tag}</h2>
               {session?.user && (
-                <Button
-                  component={Link}
-                  href={ClientRoutes.NEW_PROJECT}
-                  leftIcon={<IconPlus size={20} />}
-                >
+                <LinkButton href={ClientRoutes.NEW_PROJECT}>
+                  <IconPlus className="mr-1" size={20} />
                   New Project
-                </Button>
+                </LinkButton>
               )}
 
-              <Divider my="sm" />
+              <Divider className="my-3" />
 
-              <Text>{pluralizeCount(projects.length ?? 0, "post")} found</Text>
-            </Flex>
+              <p>{pluralizeCount(projects.length ?? 0, "post")} found</p>
+            </div>
 
-            <Box mt={20}>
+            <div className="my-5">
               <Feed data={projects} />
-            </Box>
-          </Box>
-        </MediaQuery>
-      </Container>
+            </div>
+          </div>
+        </div>
+      </div>
     </MainLayout>
   );
 }
-
-const styles = createStyles((theme) => ({
-  sidebar: {
-    boxShadow: theme.shadows.lg,
-    border: `1px solid ${theme.colors.gray[2]}`,
-    backgroundColor: theme.white,
-  },
-}));
