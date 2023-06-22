@@ -1,5 +1,3 @@
-import { Box, Container } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
@@ -10,7 +8,6 @@ import { ClientRoutes } from "~/utils/constants/routes";
 
 export function EditProjectView() {
   const { data: session } = useSession();
-  const smallScreen = useMediaQuery("(min-width: 48em)");
   const router = useRouter();
 
   const { slug } = router.query as { slug: string };
@@ -30,11 +27,9 @@ export function EditProjectView() {
 
   return (
     <MainLayout showLoader={showLoader}>
-      <Container size="lg" mt={20} pb={20}>
-        <Box mx="auto" w={smallScreen ? "75%" : "90%"}>
-          {data && <UpdateProjectForm data={data} />}
-        </Box>
-      </Container>
+      <div className="w-[90%] sm:w-auto max-w-6xl pb-5 mx-auto mt-5">
+        {data && <UpdateProjectForm data={data} />}
+      </div>
     </MainLayout>
   );
 }
