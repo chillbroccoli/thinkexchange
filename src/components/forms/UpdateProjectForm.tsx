@@ -1,22 +1,23 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, Flex } from "@mantine/core";
-import { showNotification } from "@mantine/notifications";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { FormProvider, useForm } from "react-hook-form";
 
-import { Input } from "~/components/Input";
-import { TagSelect } from "~/components/tag/TagSelect";
+import { Input } from "~/components/ui/Input";
+import { TagSelect } from "~/components/ui/TagSelect";
 import { api } from "~/utils/api";
 import { Routing } from "~/utils/api/Routing";
 import { ClientRoutes } from "~/utils/constants/routes";
+import { toast } from "~/utils/helpers/toast";
 import {
   CreateProjectInput,
   createProjectSchema,
   ProjectResponse,
 } from "~/utils/schemas/project.schema";
 
-const TextEditor = dynamic(() => import("../TextEditor").then((mod) => mod.TextEditor), {
+import { Button } from "../ui/Button";
+
+const TextEditor = dynamic(() => import("../ui/TextEditor").then((mod) => mod.TextEditor), {
   ssr: false,
 });
 
@@ -29,9 +30,9 @@ export function UpdateProjectForm({ data }: { data: ProjectResponse }) {
     { slug },
     {
       onSuccess: (data) => {
-        showNotification({
+        toast({
           title: "Project updated",
-          message: "Your project has been updated successfully",
+          description: "Your project has been updated successfully",
         });
 
         router.push(Routing.getInterpolatedRoute([ClientRoutes.PROJECT, { slug: data.slug }]));
@@ -45,7 +46,7 @@ export function UpdateProjectForm({ data }: { data: ProjectResponse }) {
       title: data.title,
       description: data.description,
       content: data.content,
-      tags: data.tags.map((tag) => tag.id),
+      tags: data.tags,
     },
   });
 
@@ -56,22 +57,29 @@ export function UpdateProjectForm({ data }: { data: ProjectResponse }) {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <Box mb={10}>
-          <Input.Text name="title" placeholder="Project's title" size="xl" w="100%" />
-        </Box>
-        <Box my={10}>
+        <div className="mb-2">
+          <Input.Text name="title" placeholder="Project's title" className="text-lg" />
+        </div>
+        <div className="my-2">
           <TagSelect />
-        </Box>
-        <Box my={10}>
-          <Input.Textarea name="description" placeholder="Description" size="xl" minRows={6} />
-        </Box>
-        <Box>
+        </div>
+        <div className="my-2">
+          <Input.Textarea
+            rows={6}
+            name="description"
+            placeholder="Description"
+            className="text-lg"
+          />
+        </div>
+        <div>
           <TextEditor name="content" content={data.content} />
-        </Box>
+        </div>
 
-        <Flex justify="end" align="center" mt={30}>
-          <Button type="submit">Edit Project</Button>
-        </Flex>
+        <div className="flex items-center justify-end mt-7">
+          <Button intent="lime" type="submit">
+            Update Project
+          </Button>
+        </div>
       </form>
     </FormProvider>
   );
