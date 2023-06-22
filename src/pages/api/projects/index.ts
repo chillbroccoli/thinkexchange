@@ -20,10 +20,12 @@ const handler: NextApiHandler = async (req, res) => {
     try {
       const body = req.body as CreateProjectInput;
 
+      const tagsIds = body.tags.map((tag) => tag.id);
+
       const tags = await prisma.tag.findMany({
         where: {
           id: {
-            in: body.tags,
+            in: tagsIds,
           },
         },
       });
