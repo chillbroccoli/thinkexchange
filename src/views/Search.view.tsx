@@ -1,17 +1,15 @@
-import { Box, Container, Text } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
+import { Feed } from "~/components/atoms/Feed";
+import { MiniList } from "~/components/atoms/MiniList";
+import { NotFoundState } from "~/components/atoms/NotFoundState";
 import { MainLayout } from "~/components/layouts/MainLayout";
-import { Feed } from "~/components/project/Feed";
-import { NotFoundState } from "~/components/project/NotFoundState";
 import { api } from "~/utils/api";
 import { useScrollPosition } from "~/utils/hooks/useScrollPosition";
 
 export function SearchView() {
   const router = useRouter();
-  const smallScreen = useMediaQuery("(min-width: 48em)");
 
   const { q } = router.query as { q: string };
 
@@ -35,6 +33,8 @@ export function SearchView() {
     }
   );
 
+  const { data: latestProjects, isLoading: isLatestLoading } = api.project.useLatestProjects();
+
   const projects = data?.pages.flatMap((page) => page.projects) ?? [];
 
   useEffect(() => {
@@ -44,23 +44,43 @@ export function SearchView() {
   }, [scrollPosition, hasNextPage, isFetching, fetchNextPage]);
 
   useEffect(() => {
-    refetch();
-  }, [router.query?.q, refetch]);
+    if (q) {
+      refetch();
+    }
+  }, [q, refetch]);
 
   return (
-    <MainLayout showLoader={isFeedLoading}>
-      <Container size="lg" mt={20}>
-        <Box w={smallScreen ? "70%" : "90%"} mx="auto">
-          <Text fz="xl" color="gray.8" fw={500}>
-            Search results for: {router.query?.q}
-          </Text>
+    <MainLayout showLoader={isFeedLoading || isLatestLoading}>
+      <div className="max-w-6xl mx-auto mt-5">
+        <div className="hidden md:block">
+          <div className="grid grid-cols-12 gap-5">
+            <div className="col-span-8">
+              <p className="mb-5 text-xl font-medium text-gray-800">
+                Search results for: {router.query?.q}
+              </p>
 
-          <Box mt={20}>
-            <Feed data={projects} />
-            {!hasNextPage && projects.length > 0 && <NotFoundState />}
-          </Box>
-        </Box>
-      </Container>
+              <Feed data={projects} />
+              {!hasNextPage && projects.length > 0 && <NotFoundState />}
+            </div>
+            <div className="col-span-4">
+              <MiniList title="Latest" data={latestProjects} />
+            </div>
+          </div>
+        </div>
+
+        <div className="block md:hidden">
+          <div className="w-[90%] sm:w-[75%] mx-auto">
+            <p className="mb-5 text-xl font-medium text-gray-800">
+              Search results for: {router.query?.q}
+            </p>
+
+            <div className="my-5">
+              <Feed data={projects} />
+              {!hasNextPage && projects.length > 0 && <NotFoundState />}
+            </div>
+          </div>
+        </div>
+      </div>
     </MainLayout>
   );
 }
