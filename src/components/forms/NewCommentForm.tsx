@@ -1,16 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, Flex } from "@mantine/core";
-import { showNotification } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { FormProvider, useForm } from "react-hook-form";
 
-import { Avatar } from "~/components/Avatar";
-import { Input } from "~/components/Input";
+import { Input } from "~/components/ui/Input";
 import { api } from "~/utils/api";
 import { QUERY_KEYS } from "~/utils/constants/keys";
+import { toast } from "~/utils/helpers/toast";
 import { queryClient } from "~/utils/queryClient";
 import { CreateCommentInput, createCommentSchema } from "~/utils/schemas/comment.schema";
+
+import { Avatar } from "../ui/Avatar";
+import { Button } from "../ui/Button";
 
 export function NewCommentForm() {
   const { data: session } = useSession();
@@ -20,15 +21,16 @@ export function NewCommentForm() {
 
   const methods = useForm<CreateCommentInput>({
     resolver: zodResolver(createCommentSchema),
+    mode: "onSubmit",
   });
 
   const { mutateAsync } = api.comment.useCreate(
     { slug },
     {
       onSuccess: () => {
-        showNotification({
+        toast({
           title: "Comment created",
-          message: "Your comment has been created",
+          description: "Your comment has been created",
         });
         methods.reset();
         queryClient.invalidateQueries([QUERY_KEYS.COMMENTS, slug]);
@@ -42,23 +44,23 @@ export function NewCommentForm() {
   };
 
   return (
-    <Flex align="start" justify="start" mt={10}>
-      <Box>
-        <Avatar src={session?.user.image} alt="Avatar" />
-      </Box>
-      <Box ml={15} w="100%">
+    <div className="flex items-start justify-start mt-5">
+      <div>
+        <Avatar src={session?.user.image} alt="Avatar" size="sm" />
+      </div>
+      <div className="w-full ml-4">
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>
-            <Input.Textarea name="content" w="100%" />
+            <Input.Textarea name="content" className="w-full" />
 
             {methods.formState.isValid && (
-              <Flex justify="flex-end" mt={10}>
+              <div className="flex justify-end mt-4">
                 <Button type="submit">Submit</Button>
-              </Flex>
+              </div>
             )}
           </form>
         </FormProvider>
-      </Box>
-    </Flex>
+      </div>
+    </div>
   );
 }
