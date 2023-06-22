@@ -1,7 +1,5 @@
-import { Box } from "@mantine/core";
-
 import { LoaderLayout } from "~/components/layouts/LoaderLayout";
-import { Navbar } from "~/components/Navbar";
+import { Navbar } from "~/components/molecules/Navbar";
 
 export function MainLayout({
   children,
@@ -11,9 +9,9 @@ export function MainLayout({
   showLoader?: boolean;
 }) {
   return (
-    <Box>
+    <div>
       <Navbar />
-      {showLoader ? <LoaderLayout /> : <Box pb={100}>{children}</Box>}
-    </Box>
+      {showLoader ? <LoaderLayout /> : <div className="pb-14">{children}</div>}
+    </div>
   );
 }
