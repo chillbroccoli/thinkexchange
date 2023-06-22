@@ -1,20 +1,21 @@
-import { showNotification } from "@mantine/notifications";
 import { MutationCache, QueryCache, QueryClient } from "@tanstack/react-query";
+
+import { toast } from "./helpers/toast";
 
 export const queryCache = new QueryCache({
   onError: (error: unknown) => {
     if (error instanceof Error) {
-      return showNotification({
+      return toast({
         title: "Error",
-        message: error.message,
-        color: "red",
+        description: error.message,
+        type: "error",
       });
     }
 
-    return showNotification({
+    return toast({
       title: "Error",
-      message: "Something went wrong",
-      color: "red",
+      description: "Something went wrong",
+      type: "error",
     });
   },
 });
@@ -22,17 +23,17 @@ export const queryCache = new QueryCache({
 export const mutationCache = new MutationCache({
   onError: (error: unknown) => {
     if (error instanceof Error) {
-      return showNotification({
+      return toast({
         title: "Error",
-        message: error.message,
-        color: "red",
+        description: error.message,
+        type: "error",
       });
     }
 
-    return showNotification({
+    return toast({
       title: "Error",
-      message: "Something went wrong",
-      color: "red",
+      description: "Something went wrong",
+      type: "error",
     });
   },
 });
