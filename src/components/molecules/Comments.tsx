@@ -1,10 +1,10 @@
-import { Box, Divider, Flex, Title } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
 
 import { NewCommentForm } from "../forms/NewCommentForm";
+import { Divider } from "../ui/Divider";
 import { CommentBox } from "./CommentBox";
 
 export function Comments() {
@@ -16,18 +16,16 @@ export function Comments() {
   const { data } = api.comment.useAll({ slug });
 
   return (
-    <Box mt={20}>
-      {!session?.user && !data?.length ? null : <Title order={4}>Comments</Title>}
+    <div className="mt-5">
+      {!session?.user && !data?.length ? null : <h4 className="text-xl">Comments</h4>}
 
       {session?.user && <NewCommentForm />}
 
-      {data && data.length > 0 && <Divider my={20} />}
+      {data && data.length > 0 && <Divider className="my-4" />}
 
-      <Box>
-        <Flex direction="column">
-          {data && data.map((comment) => <CommentBox key={comment.id} comment={comment} />)}
-        </Flex>
-      </Box>
-    </Box>
+      <div className="flex flex-col">
+        {data && data.map((comment) => <CommentBox key={comment.id} comment={comment} />)}
+      </div>
+    </div>
   );
 }
