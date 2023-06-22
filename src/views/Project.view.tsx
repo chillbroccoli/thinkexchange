@@ -1,16 +1,13 @@
-import { Box, Container, Grid, MediaQuery } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
 
-import { AuthorCard } from "~/components/author/AuthorCard";
+import { AuthorCard } from "~/components/atoms/AuthorCard";
 import { MainLayout } from "~/components/layouts/MainLayout";
-import { Project } from "~/components/project/Project";
-import { Stats } from "~/components/project/Stats";
+import { Project } from "~/components/molecules/Project";
+import { Stats } from "~/components/molecules/Stats";
 import { api } from "~/utils/api";
 
 export function ProjectView() {
   const router = useRouter();
-  const smallScreen = useMediaQuery("(min-width: 48em)");
 
   const { slug } = router.query as { slug: string };
 
@@ -24,35 +21,35 @@ export function ProjectView() {
 
   return (
     <MainLayout showLoader={isLoading}>
-      <Container size="lg" mt={20} pb={20}>
-        <MediaQuery smallerThan="md" styles={{ display: "none" }}>
+      <div className="max-w-6xl mx-auto mt-5">
+        <div className="hidden md:block">
           {data && (
-            <Grid gutter={10}>
-              <Grid.Col span={1}>
+            <div className="grid grid-cols-12 gap-5">
+              <div className="col-span-1">
                 <Stats />
-              </Grid.Col>
-              <Grid.Col span={8}>
+              </div>
+              <div className="col-span-8">
                 <Project project={data} />
-              </Grid.Col>
-              <Grid.Col span={3}>
+              </div>
+              <div className="col-span-3">
                 <AuthorCard project={data} />
-              </Grid.Col>
-            </Grid>
+              </div>
+            </div>
           )}
-        </MediaQuery>
+        </div>
 
-        <MediaQuery largerThan="md" styles={{ display: "none" }}>
-          <Box w={smallScreen ? "70%" : "90%"} mx="auto">
-            <Box>
+        <div className="md:hidden">
+          <div className="w-[90%] sm:w-[75%] mx-auto">
+            <div>
               <AuthorCard project={data} />
-            </Box>
-            <Box my={15}>
-              <Stats position="horizontal" />
-            </Box>
-            <Box>{data && <Project project={data} />}</Box>
-          </Box>
-        </MediaQuery>
-      </Container>
+            </div>
+            <div className="my-5">
+              <Stats />
+            </div>
+            <div>{data && <Project project={data} />}</div>
+          </div>
+        </div>
+      </div>
     </MainLayout>
   );
 }
