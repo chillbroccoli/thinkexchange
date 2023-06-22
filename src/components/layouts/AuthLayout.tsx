@@ -1,40 +1,24 @@
-import { ActionIcon, Box, createStyles, Flex } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 
+import { IconButton } from "../ui/IconButton";
+
 export function AuthLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const maxMediumScreen = useMediaQuery("(max-width: 64em)");
-  const { classes } = styles();
 
   return (
-    <Box w="100vw" h="100vh">
-      <ActionIcon onClick={() => router.back()} className={classes.backButton}>
-        <IconArrowLeft size={20} />
-      </ActionIcon>
-      <Flex align="center" justify="center" w="100%" h="100%">
-        <Box w={maxMediumScreen ? "85%" : 400} p={14} className={classes.main}>
+    <div className="w-screen h-screen">
+      <IconButton
+        intent="lime"
+        className="absolute top-5 left-5"
+        icon={<IconArrowLeft size={20} />}
+        onClick={() => router.back()}
+      />
+      <div className="flex items-center justify-center w-full h-full">
+        <div className="w-[85%] md:w-[400px] p-4 bg-white border border-black rounded-md">
           {children}
-        </Box>
-      </Flex>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 }
-
-const styles = createStyles((theme) => ({
-  main: {
-    border: `1px solid ${theme.colors.gray[2]}`,
-    borderRadius: theme.radius.md,
-    boxShadow: theme.shadows.sm,
-    backgroundColor: theme.white,
-  },
-
-  backButton: {
-    border: `1px solid ${theme.colors.indigo[5]}`,
-    color: theme.colors.indigo[5],
-    position: "absolute",
-    top: 20,
-    left: 20,
-  },
-}));
