@@ -1,12 +1,11 @@
-import { Box, TextInput, useMantineTheme } from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { ClientRoutes } from "~/utils/constants/routes";
 
-export function SearchBar() {
-  const theme = useMantineTheme();
+import { TextInput } from "../ui/TextInput";
+
+export function SearchBar({ close }: { close?: () => void }) {
   const router = useRouter();
 
   const [query, setQuery] = useState("");
@@ -14,18 +13,19 @@ export function SearchBar() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     router.push(`${ClientRoutes.SEARCH}?q=${query}`);
+    close?.();
   };
 
   return (
-    <Box>
+    <div>
       <form onSubmit={onSubmit}>
         <TextInput
-          placeholder="Search..."
-          rightSection={<IconSearch size={20} color={theme.colors.gray[5]} />}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search..."
+          className="w-auto lg:w-[285px]"
         />
       </form>
-    </Box>
+    </div>
   );
 }
