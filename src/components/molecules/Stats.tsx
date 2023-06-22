@@ -1,4 +1,3 @@
-import { ActionIcon, Flex, Text } from "@mantine/core";
 import {
   IconBookmark,
   IconBookmarkOff,
@@ -11,9 +10,10 @@ import { useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
 import { QUERY_KEYS } from "~/utils/constants/keys";
+import { cn } from "~/utils/helpers/cn";
 import { queryClient } from "~/utils/queryClient";
 
-export function Stats({ position = "vertical" }: { position?: "vertical" | "horizontal" }) {
+export function Stats() {
   const { data: session } = useSession();
 
   const router = useRouter();
@@ -44,48 +44,48 @@ export function Stats({ position = "vertical" }: { position?: "vertical" | "hori
   const isBookmarked = data?.bookmarks?.find((bookmark) => bookmark.userId === session?.user.id);
 
   return (
-    <Flex
-      direction={position === "vertical" ? "column" : "row"}
-      justify={position === "horizontal" ? "center" : "flex-start"}
-      gap={20}
+    <div
+      className={cn(
+        "flex flex-row md:flex-col p-2 gap-8 md:gap-4 bg-white border-2 border-black justify-center"
+      )}
     >
-      <Flex direction="column" align="center" justify="center">
+      <div className="flex flex-col items-center justify-center">
         {isLiked ? (
-          <ActionIcon color="red.5" onClick={() => like({ slug })}>
+          <button
+            className="flex items-center justify-center text-red-500"
+            onClick={() => like({ slug })}
+          >
             <IconHeartFilled size={26} />
-          </ActionIcon>
+          </button>
         ) : (
-          <ActionIcon onClick={() => like({ slug })}>
+          <button className="flex items-center justify-center" onClick={() => like({ slug })}>
             <IconHeart size={26} />
-          </ActionIcon>
+          </button>
         )}
 
-        <Text fz="sm" color="gray.7">
-          {data?._count?.likes ?? 0}
-        </Text>
-      </Flex>
-      <Flex direction="column" align="center" justify="center">
-        <ActionIcon>
+        <p className="text-sm font-semibold text-gray-800">{data?._count?.likes ?? 0}</p>
+      </div>
+      <div className="flex flex-col items-center justify-center">
+        <button className="flex items-center justify-center">
           <IconMessage2 size={26} />
-        </ActionIcon>
-        <Text fz="sm" color="gray.7">
-          {data?._count?.comments ?? 0}
-        </Text>
-      </Flex>
-      <Flex direction="column" align="center" justify="center">
+        </button>
+        <p className="text-sm font-semibold text-gray-800">{data?._count?.comments ?? 0}</p>
+      </div>
+      <div className="flex flex-col items-center justify-center">
         {isBookmarked ? (
-          <ActionIcon onClick={() => bookmark({ slug })} color="indigo.5">
+          <button
+            className="flex items-center justify-center text-indigo-500"
+            onClick={() => bookmark({ slug })}
+          >
             <IconBookmarkOff size={26} />
-          </ActionIcon>
+          </button>
         ) : (
-          <ActionIcon onClick={() => bookmark({ slug })}>
+          <button className="flex items-center justify-center" onClick={() => bookmark({ slug })}>
             <IconBookmark size={26} />
-          </ActionIcon>
+          </button>
         )}
-        <Text fz="sm" color="gray.7">
-          {data?._count?.bookmarks ?? 0}
-        </Text>
-      </Flex>
-    </Flex>
+        <p className="text-sm font-semibold text-gray-800">{data?._count?.bookmarks ?? 0}</p>
+      </div>
+    </div>
   );
 }
