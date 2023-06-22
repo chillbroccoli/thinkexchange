@@ -1,5 +1,6 @@
 import type { NextApiHandler } from "next";
 
+import { CreateProjectInput } from "~/utils/schemas/project.schema";
 import { getServerAuthSession } from "~/utils/server/auth";
 import { prisma } from "~/utils/server/db";
 
@@ -67,12 +68,14 @@ const handler: NextApiHandler = async (req, res) => {
         return res.status(403).json({ message: "Unauthorized" });
       }
 
-      const { title, description, content } = req.body;
+      const { title, description, content, tags } = req.body as CreateProjectInput;
 
-      const tags = await prisma.tag.findMany({
+      const tagsIds = tags.map((tag) => tag.id);
+
+      const foundTags = await prisma.tag.findMany({
         where: {
           id: {
-            in: req.body.tags,
+            in: tagsIds,
           },
         },
       });
@@ -86,7 +89,7 @@ const handler: NextApiHandler = async (req, res) => {
           description,
           content,
           tags: {
-            connect: tags.map((tag) => ({ id: tag.id })),
+            connect: foundTags.map((tag) => ({ id: tag.id })),
           },
         },
         include: {
